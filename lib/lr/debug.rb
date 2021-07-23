@@ -26,7 +26,7 @@ module Lr
       when Opcode::OP_CONSTANT
         constant_instruction("OP_CONSTANT", offset)
       when Opcode::OP_RETURN
-        simple_instruction("OP_NAME", offset)
+        simple_instruction("OP_RETURN", offset)
       else
         puts "Unknown opcode #{instruction}"
         offset + 1
