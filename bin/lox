@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "lr"
+
+chunk = Lr::Chunk.new
+
+constant = chunk.add_constant(1.2)
+chunk.write(Lr::Opcode::OP_CONSTANT, 123)
+chunk.write(constant, 123)
+
+chunk.write(Lr::Opcode::OP_RETURN, 123)
+
+chunk.disassemble('test chunk')
