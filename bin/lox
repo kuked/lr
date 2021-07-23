@@ -3,6 +3,7 @@
 require "bundler/setup"
 require "lr"
 
+vm = Lr::VM.new
 chunk = Lr::Chunk.new
 
 constant = chunk.add_constant(1.2)
@@ -12,3 +13,5 @@ chunk.write(constant, 123)
 chunk.write(Lr::Opcode::OP_RETURN, 123)
 
 chunk.disassemble('test chunk')
+
+vm.interpret(chunk)

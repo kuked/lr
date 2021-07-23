@@ -5,6 +5,8 @@ module Lr
   class Chunk
     include Debug
 
+    attr_reader :code
+
     def initialize
       @count = 0
       @code = []
@@ -21,6 +23,10 @@ module Lr
     def add_constant(value)
       @constants.write(value)
       @constants.count - 1
+    end
+
+    def read_constant(index)
+      @constants.values[index]
     end
   end
 end
