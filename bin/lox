@@ -10,6 +10,19 @@ constant = chunk.add_constant(1.2)
 chunk.write(Lr::Opcode::OP_CONSTANT, 123)
 chunk.write(constant, 123)
 
+constant = chunk.add_constant(3.4)
+chunk.write(Lr::Opcode::OP_CONSTANT, 123)
+chunk.write(constant, 123)
+
+chunk.write(Lr::Opcode::OP_ADD, 123)
+
+constant = chunk.add_constant(5.6)
+chunk.write(Lr::Opcode::OP_CONSTANT, 123)
+chunk.write(constant, 123)
+
+chunk.write(Lr::Opcode::OP_DIVIDE, 123)
+chunk.write(Lr::Opcode::OP_NEGATE, 123)
+
 chunk.write(Lr::Opcode::OP_RETURN, 123)
 
 chunk.disassemble('test chunk')

@@ -25,6 +25,16 @@ module Lr
       case instruction
       when Opcode::OP_CONSTANT
         constant_instruction("OP_CONSTANT", offset)
+      when Opcode::OP_ADD
+        simple_instruction("OP_ADD", offset)
+      when Opcode::OP_SUBTRACT
+        simple_instruction("OP_SUBTRACT", offset)
+      when Opcode::OP_MULTIPLY
+        simple_instruction("OP_MULTIPLY", offset)
+      when Opcode::OP_DIVIDE
+        simple_instruction("OP_DIVIDE", offset)
+      when Opcode::OP_NEGATE
+        simple_instruction("OP_NEGATE", offset)
       when Opcode::OP_RETURN
         simple_instruction("OP_RETURN", offset)
       else
