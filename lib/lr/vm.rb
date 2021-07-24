@@ -17,12 +17,11 @@ module Lr
 
     def run
       loop do
-#=begin
         print '          '
         @stack.each { |slot| print "[ #{slot} ]" }
         puts
         @chunk.disassemble_instruction(@ip)
-#=end
+
         instruction = read_code
         case instruction
         when Opcode::OP_CONSTANT
