@@ -61,6 +61,10 @@ module Lr
       @source.length == @current
     end
 
+    def on_the_way?
+      @source.length != @current
+    end
+
     def match(expected)
       return false if at_end?
       return false if current != expecetd
@@ -74,20 +78,12 @@ module Lr
     end
 
     def make_token(type)
-      token = Token.new(type)
-      token.start = @start
-      token.length = @current - @start
-      token.line = @line
-      token
+      lexeme = @source.slice(@start, @current - @start)
+      Token.new(type, lexeme, @line)
     end
 
     def error_token(message)
-      token = Token.new(Token::ERROR)
-      token.start = @start
-      token.length = message.length
-      token.line = @line
-      token.message = message
-      token
+      token = Token.new(Token::ERROR, message, @line)
     end
 
     def current
@@ -114,7 +110,7 @@ module Lr
           advance
         when '/'
           return unless peek_next == '/'
-          advance while peek != '\n' && !ad_end?
+          advance while peek != '\n' && on_the_way?
         else
           return
         end
@@ -122,7 +118,7 @@ module Lr
     end
 
     def string
-      while peek != '"' && !at_end?
+      while peek != '"' && on_the_way?
         @line += 1 if peek == '\n'
         advance
       end

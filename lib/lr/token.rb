@@ -1,12 +1,14 @@
 module Lr
   class Token
-    attr_accessor :type, :start, :length, :line, :message
+    attr_reader :type, :lexeme, :line
 
-    def initialize(type)
+    def initialize(type, lexeme, line)
       @type = type
+      @lexeme = lexeme
+      @line = line
     end
 
-    # single-character tokens.
+    # Single-character tokens.
     LEFT_PAREN = 0
     RIGHT_PAREN = 1
     LEFT_BRACE = 2
@@ -19,7 +21,7 @@ module Lr
     SLASH = 9
     STAR = 10
 
-    # one or two character tokens.
+    # One or two character tokens.
     BANG = 20
     BANG_EQUAL = 21
     EQUAL = 22
@@ -29,12 +31,12 @@ module Lr
     LESS = 26
     LESS_EQUAL = 27
 
-    # literals.
+    # Literals.
     IDENTIFIER = 30
     STRING = 31
     NUMBER = 32
 
-    # keywords.
+    # Keywords.
     AND = 40
     CLASS = 41
     ELSE = 42

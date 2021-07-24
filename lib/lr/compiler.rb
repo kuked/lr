@@ -15,7 +15,7 @@ module Lr
         else
           print '   | '
         end
-        puts format("%2d '%s'", token.type, source.slice(token.start, token.length))
+        puts format("%2d '%s'", token.type, token.lexeme)
 
         break if token.type == Token::EOF
       end
