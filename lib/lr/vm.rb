@@ -1,16 +1,23 @@
 require_relative 'chunk'
 require_relative 'opcode'
+require_relative 'compiler'
 
 module Lr
   class VM
+    # interpret result
+    INTERPRET_OK = 0
+    INTERPRET_COMPILE_ERROR = 1
+    INTERPRET_RUNTIME_ERROR = 2
+
     def initialize
       @ip = 0
       @stack = []
+      @compiler = Compiler.new
     end
 
-    def interpret(chunk)
-      @chunk = chunk
-      run
+    def interpret(source)
+      @compiler.compile(source)
+      INTERPRET_OK
     end
 
     private
@@ -39,7 +46,7 @@ module Lr
           push(-pop())
         when Opcode::OP_RETURN
           puts pop()
-          return 0              # TODO: INTERPRET_OK
+          return INTERPRET_OK
         end
       end
     end

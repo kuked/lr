@@ -3,28 +3,36 @@
 require "bundler/setup"
 require "lr"
 
+def repl(vm)
+  loop do
+    print '> '
+    line = gets
+    break unless line
+
+    vm.interpret(line.chomp)
+  end
+end
+
+def run_file(path, vm)
+  open(path) do |io|
+    result = vm.interpret(io.read)
+
+    exit(65) if result == Lr::VM::INTERPRET_COMPILE_ERROR
+    exit(70) if result == Lr::VM::INTERPERT_RUNTIME_ERROR
+  end
+end
+
+
 vm = Lr::VM.new
-chunk = Lr::Chunk.new
 
-constant = chunk.add_constant(1.2)
-chunk.write(Lr::Opcode::OP_CONSTANT, 123)
-chunk.write(constant, 123)
+if ARGV.empty?
+  repl(vm)
+else
+  if ARGV.length > 1
+    warn("Usage: lox [path]")
+    return
+  end
 
-constant = chunk.add_constant(3.4)
-chunk.write(Lr::Opcode::OP_CONSTANT, 123)
-chunk.write(constant, 123)
-
-chunk.write(Lr::Opcode::OP_ADD, 123)
-
-constant = chunk.add_constant(5.6)
-chunk.write(Lr::Opcode::OP_CONSTANT, 123)
-chunk.write(constant, 123)
-
-chunk.write(Lr::Opcode::OP_DIVIDE, 123)
-chunk.write(Lr::Opcode::OP_NEGATE, 123)
-
-chunk.write(Lr::Opcode::OP_RETURN, 123)
-
-chunk.disassemble('test chunk')
-
-vm.interpret(chunk)
+  path = ARGV[0]
+  run_file(path, vm)
+end
