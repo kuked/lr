@@ -56,5 +56,29 @@ module Lr
 
     ERROR = 90
     EOF = 91
+
+    def self.keywords
+      h = {
+       'and':    AND,
+       'class':  CLASS,
+       'else':   ELSE,
+       'false':  FALSE,
+       'for':    FOR,
+       'fun':    FUN,
+       'if':     IF,
+       'nil':    NIL,
+       'or':     OR,
+       'print':  PRINT,
+       'return': RETURN,
+       'super':  SUPER,
+       'this':   THIS,
+       'true':   TRUE,
+       'var':    VAR,
+       'while':  WHILE,
+      }
+      h.default = IDENTIFIER
+
+      h.freeze
+    end
   end
 end

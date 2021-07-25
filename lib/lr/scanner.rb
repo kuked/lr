@@ -16,6 +16,8 @@ module Lr
       return make_token(Token::EOF) if at_end?
 
       c = advance
+      return identifier if alpha?(c)
+      return number if digit?(c)
 
       case c
       when '('
@@ -63,6 +65,22 @@ module Lr
 
     def on_the_way?
       @source.length != @current
+    end
+
+    def digit?(c)
+      return false if c.nil?
+      48 <= c.ord && c.ord <= 57
+    end
+
+    def alpha?(c)
+      return false if c.nil?
+      code = c.ord
+      # 'a': 97
+      # 'z': 122
+      # 'A': 65
+      # 'Z': 90
+      # '_': 95
+      (97 <= code && code <= 122) || (65 <= code && code <= 90) || code == 95
     end
 
     def match(expected)
@@ -128,6 +146,28 @@ module Lr
       # The closing quote.
       advance
       make_token(Token::STRING)
+    end
+
+    def number
+      advance while digit?(peek)
+
+      # Loof for fractional part.
+      if peek == '.' && digit?(peek_next)
+        advance
+        advance while digit?(peek)
+      end
+
+      make_token(Token::NUMBER)
+    end
+
+    def identifier
+      advance while alpha?(peek) || digit?(peek)
+      make_token(identifier_type)
+    end
+
+    def identifier_type
+      lexeme = @source.slice(@start, @current - @start)
+      Token::keywords[lexeme]
     end
   end
 end
