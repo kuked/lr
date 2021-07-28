@@ -10,19 +10,20 @@ module Lr
     INTERPRET_RUNTIME_ERROR = 2
 
     def initialize
-      @ip = 0
       @stack = []
       @compiler = Compiler.new
     end
 
     def interpret(source)
-      @compiler.compile(source)
-      INTERPRET_OK
+      # TODO: catch exception
+      @chunk = @compiler.compile(source)
+      run
     end
 
     private
 
     def run
+      @ip = 0
       loop do
         print '          '
         @stack.each { |slot| print "[ #{slot} ]" }
