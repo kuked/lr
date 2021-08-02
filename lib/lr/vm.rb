@@ -25,7 +25,7 @@ module Lr
     def run
       @ip = 0
       loop do
-        print '          '
+        print ' ' * 10
         @stack.each { |slot| print "[ #{slot} ]" }
         puts
         @chunk.disassemble_instruction(@ip)

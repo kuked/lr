@@ -102,6 +102,20 @@ module Lr
     def error_at_current(message)
     end
 
+    def error(message)
+    end
+
+    def error_at(token, message)
+      $stderr.print "[line #{token.line}] Error"
+
+      if token.type == Token::EOF
+        $stderr.print " at end"
+      else
+        $stderr.print " at '#{token.lexeme}'"
+      end
+      $stderr.puts ": #{message}"
+    end
+
     def emit_byte(byte)
       @chunk.write(byte, @previous.line)
     end
