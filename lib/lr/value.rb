@@ -1,15 +1,9 @@
 module Lr
   class Value
-    attr_reader :count, :values
+    attr_reader :value
 
-    def initialize
-      @count  = 0
-      @values = []
-    end
-
-    def write(value)
-      @values[@count] = value
-      @count += 1
+    def initialize(value)
+      @value = value
     end
   end
 end

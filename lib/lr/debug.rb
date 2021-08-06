@@ -50,7 +50,7 @@ module Lr
 
     def constant_instruction(name, offset)
       constant = @code[offset + 1]
-      puts format("%-16s %4d '#{@constants.values[constant]}'", name, constant)
+      puts format("%-16s %4d '#{@constants[constant].value}'", name, constant)
       offset + 2
     end
   end

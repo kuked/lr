@@ -11,7 +11,7 @@ module Lr
       @count = 0
       @code = []
       @lines = []
-      @constants = Lr::Value.new
+      @constants = []
     end
 
     def write(byte, line)
@@ -21,12 +21,12 @@ module Lr
     end
 
     def add_constant(value)
-      @constants.write(value)
-      @constants.count - 1
+      @constants << Lr::Value.new(value)
+      @constants.length - 1
     end
 
     def read_constant(index)
-      @constants.values[index]
+      @constants[index].value
     end
   end
 end
