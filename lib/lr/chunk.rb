@@ -26,7 +26,7 @@ module Lr
     end
 
     def read_constant(index)
-      @constants[index].value
+      @constants[index]
     end
   end
 end

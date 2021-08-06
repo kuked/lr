@@ -12,6 +12,18 @@ module Lr
       @type = type
     end
 
+    def bool?
+      @type == VAL_BOOL
+    end
+
+    def nil?
+      @type == VAL_NIL
+    end
+
+    def number?
+      @type == VAL_NUMBER
+    end
+
     def self.bool_val(value)
       self.new(vlaue, VAL_BOOL)
     end

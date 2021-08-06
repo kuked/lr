@@ -36,17 +36,21 @@ module Lr
           constant = @chunk.read_constant(read_code)
           push(constant)
         when Opcode::OP_ADD
-          binary_op(:+)
+          binary_op(:number_val, :+)
         when Opcode::OP_SUBTRACT
-          binary_op(:-)
+          binary_op(:number_val, :-)
         when Opcode::OP_MULTIPLY
-          binary_op(:*)
+          binary_op(:number_val, :*)
         when Opcode::OP_DIVIDE
-          binary_op(:/)
+          binary_op(:number_val, :/)
         when Opcode::OP_NEGATE
+          unless peek(0).number?
+            # TODO: runtimeerror
+            return INTERPRET_RUNTIME_ERROR
+          end
           push(-pop())
         when Opcode::OP_RETURN
-          puts pop()
+          puts pop().value
           return INTERPRET_OK
         end
       end
@@ -66,10 +70,19 @@ module Lr
       @stack.pop
     end
 
-    def binary_op(operation)
-      b = pop()
-      a = pop()
-      push(a.send(operation, b))
+    def peek(distance)
+      @stack[-1 - distance]
+    end
+
+    def binary_op(type, operation)
+      if !peek(0).number? || !peek(1).number?
+        # TODO: runtimeerror
+      end
+      b = pop().value
+      a = pop().value
+
+      c = a.send(operation, b)
+      push(Value.send(type, c))
     end
   end
 end
