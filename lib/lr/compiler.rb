@@ -81,7 +81,8 @@ module Lr
     end
 
     def number
-      emit_constant(@previous.lexeme.to_f)
+      value = @previous.lexeme.to_f
+      emit_constant(Value.number_val(value))
     end
 
     def advance

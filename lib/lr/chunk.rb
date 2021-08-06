@@ -21,7 +21,7 @@ module Lr
     end
 
     def add_constant(value)
-      @constants << Lr::Value.new(value)
+      @constants << value
       @constants.length - 1
     end
 
