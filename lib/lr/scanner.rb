@@ -167,7 +167,7 @@ module Lr
 
     def identifier_type
       lexeme = @source.slice(@start, @current - @start)
-      Token::keywords[lexeme]
+      Token.keywords[lexeme.to_sym]
     end
   end
 end

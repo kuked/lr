@@ -24,8 +24,19 @@ module Lr
       @type == VAL_NUMBER
     end
 
+    def printable
+      case @type
+      when VAL_BOOL
+        @value ? "true" : "false"
+      when VAL_NIL
+        "nil"
+      when VAL_NUMBER
+        @value
+      end
+    end
+
     def self.bool_val(value)
-      self.new(vlaue, VAL_BOOL)
+      self.new(value, VAL_BOOL)
     end
 
     def self.nil_val

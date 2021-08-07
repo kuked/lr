@@ -1,11 +1,14 @@
 module Lr
   module Opcode
     OP_CONSTANT = 0
-    OP_ADD      = 1
-    OP_SUBTRACT = 2
-    OP_MULTIPLY = 3
-    OP_DIVIDE   = 4
-    OP_NEGATE   = 5
-    OP_RETURN   = 6
+    OP_NIL      = 1
+    OP_TRUE     = 2
+    OP_FALSE    = 3
+    OP_ADD      = 4
+    OP_SUBTRACT = 5
+    OP_MULTIPLY = 6
+    OP_DIVIDE   = 7
+    OP_NEGATE   = 8
+    OP_RETURN   = 9
   end
 end

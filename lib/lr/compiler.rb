@@ -80,6 +80,17 @@ module Lr
       end
     end
 
+    def literal
+      case @previous.type
+      when Token::FALSE
+        emit_byte(Opcode::OP_FALSE)
+      when Token::NIL
+        emit_byte(Opcode::OP_NIL)
+      when Token::TRUE
+        emit_byte(Opcode::OP_TRUE)
+      end
+    end
+
     def number
       value = @previous.lexeme.to_f
       emit_constant(Value.number_val(value))
@@ -182,17 +193,17 @@ module Lr
         Token::AND => { prefix: nil, infix: nil, precedence: PREC_NONE },
         Token::CLASS => { prefix: nil, infix: nil, precedence: PREC_NONE },
         Token::ELSE => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::FALSE => { prefix: nil, infix: nil, precedence: PREC_NONE },
+        Token::FALSE => { prefix: :literal, infix: nil, precedence: PREC_NONE },
         Token::FOR => { prefix: nil, infix: nil, precedence: PREC_NONE },
         Token::FUN => { prefix: nil, infix: nil, precedence: PREC_NONE },
         Token::IF => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::NIL => { prefix: nil, infix: nil, precedence: PREC_NONE },
+        Token::NIL => { prefix: :literal, infix: nil, precedence: PREC_NONE },
         Token::OR => { prefix: nil, infix: nil, precedence: PREC_NONE },
         Token::PRINT => { prefix: nil, infix: nil, precedence: PREC_NONE },
         Token::RETURN => { prefix: nil, infix: nil, precedence: PREC_NONE },
         Token::SUPER => { prefix: nil, infix: nil, precedence: PREC_NONE },
         Token::THIS => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::TRUE => { prefix: nil, infix: nil, precedence: PREC_NONE },
+        Token::TRUE => { prefix: :literal, infix: nil, precedence: PREC_NONE },
         Token::VAR => { prefix: nil, infix: nil, precedence: PREC_NONE },
         Token::WHILE => { prefix: nil, infix: nil, precedence: PREC_NONE },
         Token::ERROR => { prefix: nil, infix: nil, precedence: PREC_NONE },

@@ -26,7 +26,7 @@ module Lr
       @ip = 0
       loop do
         print ' ' * 10
-        @stack.each { |slot| print "[ #{slot} ]" }
+        @stack.each { |slot| print "[ #{slot.printable} ]" }
         puts
         @chunk.disassemble_instruction(@ip)
 
@@ -35,6 +35,12 @@ module Lr
         when Opcode::OP_CONSTANT
           constant = @chunk.read_constant(read_code)
           push(constant)
+        when Opcode::OP_NIL
+          push(Value.nil_val)
+        when Opcode::OP_FALSE
+          push(Value.bool_val(false))
+        when Opcode::OP_TRUE
+          push(Value.bool_val(true))
         when Opcode::OP_ADD
           binary_op(:number_val, :+)
         when Opcode::OP_SUBTRACT
@@ -50,7 +56,7 @@ module Lr
           end
           push(-pop())
         when Opcode::OP_RETURN
-          puts pop().value
+          puts pop().printable
           return INTERPRET_OK
         end
       end
