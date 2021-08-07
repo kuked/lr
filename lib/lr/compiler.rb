@@ -66,7 +66,7 @@ module Lr
     def binary
       type = @previous.type
       rule = @rules[type]
-      parse_precedence(rule[:precedence] + 1)
+      parse_precedence(rule.precedence + 1)
 
       case type
       when Token::PLUS
@@ -151,7 +151,7 @@ module Lr
 
     def parse_precedence(precedence)
       advance
-      prefix = @rules[@previous.type][:prefix]
+      prefix = @rules[@previous.type].prefix
       unless prefix
         # TODO
         # error("Expect expression.")
@@ -159,55 +159,56 @@ module Lr
       end
       self.send(prefix)
 
-      while precedence <= @rules[@current.type][:precedence]
+      while precedence <= @rules[@current.type].precedence
         advance
-        infix = @rules[@previous.type][:infix]
+        infix = @rules[@previous.type].infix
         self.send(infix)
       end
     end
 
     def define_rules
+      rule = Struct.new(:prefix, :infix, :precedence)
       rules = {
-        Token::LEFT_PAREN => { prefix: :grouping, infix: nil, precedence: PREC_NONE },
-        Token::RIGHT_PAREN => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::LEFT_BRACE => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::RIGHT_BRACE => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::COMMA => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::DOT => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::MINUS => { prefix: :unary, infix: :binary, precedence: PREC_TERM },
-        Token::PLUS => { prefix: nil, infix: :binary, precedence: PREC_TERM },
-        Token::SEMICOLON => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::SLASH => { prefix: nil, infix: :binary, precedence: PREC_FACTOR },
-        Token::STAR => { prefix: nil, infix: :binary, precedence: PREC_FACTOR },
-        Token::BANG => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::BANG_EQUAL => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::EQUAL => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::EQUAL_EQUAL => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::GREATER => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::GREATER_EQUAL => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::LESS => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::LESS_EQUAL => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::IDENTIFIER => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::STRING => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::NUMBER => { prefix: :number, infix: nil, precedence: PREC_NONE },
-        Token::AND => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::CLASS => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::ELSE => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::FALSE => { prefix: :literal, infix: nil, precedence: PREC_NONE },
-        Token::FOR => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::FUN => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::IF => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::NIL => { prefix: :literal, infix: nil, precedence: PREC_NONE },
-        Token::OR => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::PRINT => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::RETURN => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::SUPER => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::THIS => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::TRUE => { prefix: :literal, infix: nil, precedence: PREC_NONE },
-        Token::VAR => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::WHILE => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::ERROR => { prefix: nil, infix: nil, precedence: PREC_NONE },
-        Token::EOF => { prefix: nil, infix: nil, precedence: PREC_NONE },
+        Token::LEFT_PAREN    => rule.new(:grouping, nil, PREC_NONE),
+        Token::RIGHT_PAREN   => rule.new(nil, nil, PREC_NONE),
+        Token::LEFT_BRACE    => rule.new(nil, nil, PREC_NONE),
+        Token::RIGHT_BRACE   => rule.new(nil, nil, PREC_NONE),
+        Token::COMMA         => rule.new(nil, nil, PREC_NONE),
+        Token::DOT           => rule.new(nil, nil, PREC_NONE),
+        Token::MINUS         => rule.new(:unary, :binary, PREC_TERM),
+        Token::PLUS          => rule.new(nil, :binary, PREC_TERM),
+        Token::SEMICOLON     => rule.new(nil, nil, PREC_NONE),
+        Token::SLASH         => rule.new(nil, :binary, PREC_FACTOR),
+        Token::STAR          => rule.new(nil, :binary, PREC_FACTOR),
+        Token::BANG          => rule.new(nil, nil, PREC_NONE),
+        Token::BANG_EQUAL    => rule.new(nil, nil, PREC_NONE),
+        Token::EQUAL         => rule.new(nil, nil, PREC_NONE),
+        Token::EQUAL_EQUAL   => rule.new(nil, nil, PREC_NONE),
+        Token::GREATER       => rule.new(nil, nil, PREC_NONE),
+        Token::GREATER_EQUAL => rule.new(nil, nil, PREC_NONE),
+        Token::LESS          => rule.new(nil, nil, PREC_NONE),
+        Token::LESS_EQUAL    => rule.new(nil, nil, PREC_NONE),
+        Token::IDENTIFIER    => rule.new(nil, nil, PREC_NONE),
+        Token::STRING        => rule.new(nil, nil, PREC_NONE),
+        Token::NUMBER        => rule.new(:number, nil, PREC_NONE),
+        Token::AND           => rule.new(nil, nil, PREC_NONE),
+        Token::CLASS         => rule.new(nil, nil, PREC_NONE),
+        Token::ELSE          => rule.new(nil, nil, PREC_NONE),
+        Token::FALSE         => rule.new(:literal, nil, PREC_NONE),
+        Token::FOR           => rule.new(nil, nil, PREC_NONE),
+        Token::FUN           => rule.new(nil, nil, PREC_NONE),
+        Token::IF            => rule.new(nil, nil, PREC_NONE),
+        Token::NIL           => rule.new(:literal, nil, PREC_NONE),
+        Token::OR            => rule.new(nil, nil, PREC_NONE),
+        Token::PRINT         => rule.new(nil, nil, PREC_NONE),
+        Token::RETURN        => rule.new(nil, nil, PREC_NONE),
+        Token::SUPER         => rule.new(nil, nil, PREC_NONE),
+        Token::THIS          => rule.new(nil, nil, PREC_NONE),
+        Token::TRUE          => rule.new(:literal, nil, PREC_NONE),
+        Token::VAR           => rule.new(nil, nil, PREC_NONE),
+        Token::WHILE         => rule.new(nil, nil, PREC_NONE),
+        Token::ERROR         => rule.new(nil, nil, PREC_NONE),
+        Token::EOF           => rule.new(nil, nil, PREC_NONE),
       }
       rules.freeze
     end
