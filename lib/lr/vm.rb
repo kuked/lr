@@ -50,7 +50,13 @@ module Lr
         when Opcode::OP_LESS
           binary_op(:bool_val, :<)
         when Opcode::OP_ADD
-          binary_op(:number_val, :+)
+          if peek(0).string? && peek(1).string?
+            concatenate
+          elsif peek(0).number? && peek(1).number?
+            b = pop().value
+            a = pop().value
+            push(Value.number_val(a + b))
+          end
         when Opcode::OP_SUBTRACT
           binary_op(:number_val, :-)
         when Opcode::OP_MULTIPLY
@@ -99,6 +105,12 @@ module Lr
 
       c = a.send(operation, b)
       push(Value.send(type, c))
+    end
+
+    def concatenate
+      b = pop.string
+      a = pop.string
+      push(Value.obj_val(Lr::Object.string_obj(a + b)))
     end
   end
 end

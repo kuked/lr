@@ -2,6 +2,7 @@ require_relative "chunk"
 require_relative "scanner"
 require_relative "opcode"
 require_relative "token"
+require_relative "object"
 
 module Lr
   class Compiler
@@ -110,6 +111,11 @@ module Lr
       emit_constant(Value.number_val(value))
     end
 
+    def string
+      value = @previous.lexeme[1..-2] # trim quotation marks
+      emit_constant(Value.obj_val(Lr::Object.string_obj(value)))
+    end
+
     def advance
       @previous = @current
 
@@ -203,7 +209,7 @@ module Lr
         Token::LESS => rule.new(nil, :binary, PREC_COMPARISON),
         Token::LESS_EQUAL => rule.new(nil, :binary, PREC_COMPARISON),
         Token::IDENTIFIER => rule.new(nil, nil, PREC_NONE),
-        Token::STRING => rule.new(nil, nil, PREC_NONE),
+        Token::STRING => rule.new(:string, nil, PREC_NONE),
         Token::NUMBER => rule.new(:number, nil, PREC_NONE),
         Token::AND => rule.new(nil, nil, PREC_NONE),
         Token::CLASS => rule.new(nil, nil, PREC_NONE),
