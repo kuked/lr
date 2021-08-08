@@ -70,9 +70,9 @@ module Lr
             # TODO: runtimeerror
             return INTERPRET_RUNTIME_ERROR
           end
-          push(-pop())
+          push(Value.number_val(-pop.value))
         when Opcode::OP_RETURN
-          puts pop().printable
+          puts pop.printable
           return INTERPRET_OK
         end
       end
@@ -100,8 +100,8 @@ module Lr
       if !peek(0).number? || !peek(1).number?
         # TODO: runtimeerror
       end
-      b = pop().value
-      a = pop().value
+      b = pop.value
+      a = pop.value
 
       c = a.send(operation, b)
       push(Value.send(type, c))
