@@ -41,6 +41,14 @@ module Lr
           push(Value.bool_val(false))
         when Opcode::OP_TRUE
           push(Value.bool_val(true))
+        when Opcode::OP_EQUAL
+          b = pop
+          a = pop
+          push(Value.bool_val(a.eql?(b)))
+        when Opcode::OP_GREATER
+          binary_op(:bool_val, :>)
+        when Opcode::OP_LESS
+          binary_op(:bool_val, :<)
         when Opcode::OP_ADD
           binary_op(:number_val, :+)
         when Opcode::OP_SUBTRACT

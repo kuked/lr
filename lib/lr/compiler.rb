@@ -71,6 +71,18 @@ module Lr
       parse_precedence(rule.precedence + 1)
 
       case type
+      when Token::BANG_EQUAL
+        emit_bytes(Opcode::OP_EQUAL, Opcode::OP_NOT)
+      when Token::EQUAL_EQUAL
+        emit_byte(Opcode::OP_EQUAL)
+      when Token::GREATER
+        emit_byte(Opcode::OP_GREATER)
+      when Token::GREATER_EQUAL
+        emit_bytes(Opcode::OP_LESS, Opcode::OP_NOT)
+      when Token::LESS
+        emit_byte(Opcode::OP_LESS)
+      when Token::LESS_EQUAL
+        emit_bytes(Opcode::OP_GREATER, Opcode::OP_NOT)
       when Token::PLUS
         emit_byte(Opcode::OP_ADD)
       when Token::MINUS
@@ -183,13 +195,13 @@ module Lr
         Token::SLASH => rule.new(nil, :binary, PREC_FACTOR),
         Token::STAR => rule.new(nil, :binary, PREC_FACTOR),
         Token::BANG => rule.new(:unary, nil, PREC_NONE),
-        Token::BANG_EQUAL => rule.new(nil, nil, PREC_NONE),
+        Token::BANG_EQUAL => rule.new(nil, :binary, PREC_EQUALITY),
         Token::EQUAL => rule.new(nil, nil, PREC_NONE),
-        Token::EQUAL_EQUAL => rule.new(nil, nil, PREC_NONE),
-        Token::GREATER => rule.new(nil, nil, PREC_NONE),
-        Token::GREATER_EQUAL => rule.new(nil, nil, PREC_NONE),
-        Token::LESS => rule.new(nil, nil, PREC_NONE),
-        Token::LESS_EQUAL => rule.new(nil, nil, PREC_NONE),
+        Token::EQUAL_EQUAL => rule.new(nil, :binary, PREC_EQUALITY),
+        Token::GREATER => rule.new(nil, :binary, PREC_COMPARISON),
+        Token::GREATER_EQUAL => rule.new(nil, :binary, PREC_COMPARISON),
+        Token::LESS => rule.new(nil, :binary, PREC_COMPARISON),
+        Token::LESS_EQUAL => rule.new(nil, :binary, PREC_COMPARISON),
         Token::IDENTIFIER => rule.new(nil, nil, PREC_NONE),
         Token::STRING => rule.new(nil, nil, PREC_NONE),
         Token::NUMBER => rule.new(:number, nil, PREC_NONE),

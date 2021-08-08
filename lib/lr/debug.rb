@@ -31,6 +31,12 @@ module Lr
         simple_instruction("OP_FALSE", offset)
       when Opcode::OP_TRUE
         simple_instruction("OP_TRUE", offset)
+      when Opcode::OP_EQUAL
+        return simple_instruction("OP_EQUAL", offset)
+      when Opcode::OP_GREATER
+        return simple_instruction("OP_GREATER", offset)
+      when Opcode::OP_LESS
+        return simple_instruction("OP_LESS", offset)
       when Opcode::OP_ADD
         simple_instruction("OP_ADD", offset)
       when Opcode::OP_SUBTRACT

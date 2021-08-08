@@ -49,7 +49,7 @@ module Lr
       when "<"
         return make_token(match("=") ? Token::LESS_EQUAL : Token::LESS)
       when ">"
-        return make_token(match(">") ? Token::GREATER_EQUAL : Token::GREATER)
+        return make_token(match("=") ? Token::GREATER_EQUAL : Token::GREATER)
       when '"'
         return string
       end
@@ -85,7 +85,7 @@ module Lr
 
     def match(expected)
       return false if at_end?
-      return false if current != expected
+      return false if peek != expected
       @current += 1
       true
     end

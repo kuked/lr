@@ -1,6 +1,6 @@
 module Lr
   class Value
-    attr_reader :value
+    attr_reader :value, :type
 
     # types of value
     VAL_BOOL = 0
@@ -26,6 +26,22 @@ module Lr
 
     def falsey?
       nil? || (bool? && !@value)
+    end
+
+    def eql?(other)
+      result = if @type != other.type
+          false
+        else
+          case @type
+          when VAL_BOOL, VAL_NUMBER
+            @value == other.value
+          when VAL_NIL
+            true
+          else
+            false
+          end
+        end
+      result
     end
 
     def printable
