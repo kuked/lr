@@ -49,6 +49,8 @@ module Lr
           binary_op(:number_val, :*)
         when Opcode::OP_DIVIDE
           binary_op(:number_val, :/)
+        when Opcode::OP_NOT
+          push(Value.bool_val(pop.falsey?))
         when Opcode::OP_NEGATE
           unless peek(0).number?
             # TODO: runtimeerror

@@ -8,7 +8,8 @@ module Lr
     OP_SUBTRACT = 5
     OP_MULTIPLY = 6
     OP_DIVIDE   = 7
-    OP_NEGATE   = 8
-    OP_RETURN   = 9
+    OP_NOT      = 8
+    OP_NEGATE   = 9
+    OP_RETURN   = 10
   end
 end

@@ -39,6 +39,8 @@ module Lr
         simple_instruction("OP_MULTIPLY", offset)
       when Opcode::OP_DIVIDE
         simple_instruction("OP_DIVIDE", offset)
+      when Opcode::OP_NOT
+        simple_instruction("OP_NOT", offset)
       when Opcode::OP_NEGATE
         simple_instruction("OP_NEGATE", offset)
       when Opcode::OP_RETURN

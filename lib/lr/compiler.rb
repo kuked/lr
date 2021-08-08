@@ -56,6 +56,8 @@ module Lr
 
       # Emit the operator instruction.
       case type
+      when Token::BANG
+        emit_byte(Opcode::OP_NOT)
       when Token::MINUS
         emit_byte(Opcode::OP_NEGATE)
       else
@@ -180,7 +182,7 @@ module Lr
         Token::SEMICOLON     => rule.new(nil, nil, PREC_NONE),
         Token::SLASH         => rule.new(nil, :binary, PREC_FACTOR),
         Token::STAR          => rule.new(nil, :binary, PREC_FACTOR),
-        Token::BANG          => rule.new(nil, nil, PREC_NONE),
+        Token::BANG          => rule.new(:unary, nil, PREC_NONE),
         Token::BANG_EQUAL    => rule.new(nil, nil, PREC_NONE),
         Token::EQUAL         => rule.new(nil, nil, PREC_NONE),
         Token::EQUAL_EQUAL   => rule.new(nil, nil, PREC_NONE),

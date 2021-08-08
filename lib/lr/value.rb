@@ -24,6 +24,10 @@ module Lr
       @type == VAL_NUMBER
     end
 
+    def falsey?
+      nil? || (bool? && !@value)
+    end
+
     def printable
       case @type
       when VAL_BOOL

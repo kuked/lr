@@ -85,7 +85,7 @@ module Lr
 
     def match(expected)
       return false if at_end?
-      return false if current != expecetd
+      return false if current != expected
       @current += 1
       true
     end
