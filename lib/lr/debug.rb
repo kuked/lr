@@ -1,4 +1,4 @@
-require_relative 'opcode'
+require_relative "opcode"
 
 module Lr
   module Debug
@@ -12,7 +12,7 @@ module Lr
     end
 
     def disassemble_instruction(offset)
-      print format('%04d ', offset)
+      print format("%04d ", offset)
 
       if offset > 0 && @lines[offset] == @lines[offset - 1]
         print "   | "

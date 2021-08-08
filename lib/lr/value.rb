@@ -3,8 +3,8 @@ module Lr
     attr_reader :value
 
     # types of value
-    VAL_BOOL   = 0
-    VAL_NIL    = 1
+    VAL_BOOL = 0
+    VAL_NIL = 1
     VAL_NUMBER = 2
 
     def initialize(value, type)

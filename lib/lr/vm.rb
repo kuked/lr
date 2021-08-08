@@ -1,6 +1,6 @@
-require_relative 'chunk'
-require_relative 'opcode'
-require_relative 'compiler'
+require_relative "chunk"
+require_relative "opcode"
+require_relative "compiler"
 
 module Lr
   class VM
@@ -25,7 +25,7 @@ module Lr
     def run
       @ip = 0
       loop do
-        print ' ' * 10
+        print " " * 10
         @stack.each { |slot| print "[ #{slot.printable} ]" }
         puts
         @chunk.disassemble_instruction(@ip)

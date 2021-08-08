@@ -1,5 +1,5 @@
-require_relative 'value'
-require_relative 'debug'
+require_relative "value"
+require_relative "debug"
 
 module Lr
   class Chunk

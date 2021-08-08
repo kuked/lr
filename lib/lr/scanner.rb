@@ -1,4 +1,4 @@
-require_relative 'token'
+require_relative "token"
 
 module Lr
   class Scanner
@@ -20,41 +20,41 @@ module Lr
       return number if digit?(c)
 
       case c
-      when '('
+      when "("
         return make_token(Token::LEFT_PAREN)
-      when ')'
+      when ")"
         return make_token(Token::RIGHT_PAREN)
-      when '{'
+      when "{"
         return make_token(Token::LEFT_BRACE)
-      when '}'
+      when "}"
         return make_token(Token::RIGHT_BRACE)
-      when ';'
+      when ";"
         return make_token(Token::SEMICOLON)
-      when ','
+      when ","
         return make_token(Token::COMMA)
-      when '.'
+      when "."
         return make_token(Token::DOT)
-      when '-'
+      when "-"
         return make_token(Token::MINUS)
-      when '+'
+      when "+"
         return make_token(Token::PLUS)
-      when '/'
+      when "/"
         return make_token(Token::SLASH)
-      when '*'
+      when "*"
         return make_token(Token::STAR)
-      when '!'
-        return make_token(match('=') ? Token::BANG_EQUAL : Token::BANG)
-      when '='
-        return make_token(match('=') ? Token::EQUAL_EQUAL : Token::EQUAL)
-      when '<'
-        return make_token(match('=') ? Token::LESS_EQUAL : Token::LESS)
-      when '>'
-        return make_token(match('>') ? Token::GREATER_EQUAL : Token::GREATER)
+      when "!"
+        return make_token(match("=") ? Token::BANG_EQUAL : Token::BANG)
+      when "="
+        return make_token(match("=") ? Token::EQUAL_EQUAL : Token::EQUAL)
+      when "<"
+        return make_token(match("=") ? Token::LESS_EQUAL : Token::LESS)
+      when ">"
+        return make_token(match(">") ? Token::GREATER_EQUAL : Token::GREATER)
       when '"'
         return string
       end
 
-      return error_token('Unexpected character.')
+      return error_token("Unexpected character.")
     end
 
     private
@@ -121,13 +121,13 @@ module Lr
       loop do
         c = peek
         case c
-        when ' ', '\r', '\t'
+        when " ", '\r', '\t'
           advance
         when '\n'
           @line += 1
           advance
-        when '/'
-          return unless peek_next == '/'
+        when "/"
+          return unless peek_next == "/"
           advance while peek != '\n' && on_the_way?
         else
           return
@@ -152,7 +152,7 @@ module Lr
       advance while digit?(peek)
 
       # Loof for fractional part.
-      if peek == '.' && digit?(peek_next)
+      if peek == "." && digit?(peek_next)
         advance
         advance while digit?(peek)
       end

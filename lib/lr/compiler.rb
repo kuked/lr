@@ -1,7 +1,7 @@
-require_relative 'chunk'
-require_relative 'scanner'
-require_relative 'opcode'
-require_relative 'token'
+require_relative "chunk"
+require_relative "scanner"
+require_relative "opcode"
+require_relative "token"
 
 module Lr
   class Compiler
@@ -171,46 +171,46 @@ module Lr
     def define_rules
       rule = Struct.new(:prefix, :infix, :precedence)
       rules = {
-        Token::LEFT_PAREN    => rule.new(:grouping, nil, PREC_NONE),
-        Token::RIGHT_PAREN   => rule.new(nil, nil, PREC_NONE),
-        Token::LEFT_BRACE    => rule.new(nil, nil, PREC_NONE),
-        Token::RIGHT_BRACE   => rule.new(nil, nil, PREC_NONE),
-        Token::COMMA         => rule.new(nil, nil, PREC_NONE),
-        Token::DOT           => rule.new(nil, nil, PREC_NONE),
-        Token::MINUS         => rule.new(:unary, :binary, PREC_TERM),
-        Token::PLUS          => rule.new(nil, :binary, PREC_TERM),
-        Token::SEMICOLON     => rule.new(nil, nil, PREC_NONE),
-        Token::SLASH         => rule.new(nil, :binary, PREC_FACTOR),
-        Token::STAR          => rule.new(nil, :binary, PREC_FACTOR),
-        Token::BANG          => rule.new(:unary, nil, PREC_NONE),
-        Token::BANG_EQUAL    => rule.new(nil, nil, PREC_NONE),
-        Token::EQUAL         => rule.new(nil, nil, PREC_NONE),
-        Token::EQUAL_EQUAL   => rule.new(nil, nil, PREC_NONE),
-        Token::GREATER       => rule.new(nil, nil, PREC_NONE),
+        Token::LEFT_PAREN => rule.new(:grouping, nil, PREC_NONE),
+        Token::RIGHT_PAREN => rule.new(nil, nil, PREC_NONE),
+        Token::LEFT_BRACE => rule.new(nil, nil, PREC_NONE),
+        Token::RIGHT_BRACE => rule.new(nil, nil, PREC_NONE),
+        Token::COMMA => rule.new(nil, nil, PREC_NONE),
+        Token::DOT => rule.new(nil, nil, PREC_NONE),
+        Token::MINUS => rule.new(:unary, :binary, PREC_TERM),
+        Token::PLUS => rule.new(nil, :binary, PREC_TERM),
+        Token::SEMICOLON => rule.new(nil, nil, PREC_NONE),
+        Token::SLASH => rule.new(nil, :binary, PREC_FACTOR),
+        Token::STAR => rule.new(nil, :binary, PREC_FACTOR),
+        Token::BANG => rule.new(:unary, nil, PREC_NONE),
+        Token::BANG_EQUAL => rule.new(nil, nil, PREC_NONE),
+        Token::EQUAL => rule.new(nil, nil, PREC_NONE),
+        Token::EQUAL_EQUAL => rule.new(nil, nil, PREC_NONE),
+        Token::GREATER => rule.new(nil, nil, PREC_NONE),
         Token::GREATER_EQUAL => rule.new(nil, nil, PREC_NONE),
-        Token::LESS          => rule.new(nil, nil, PREC_NONE),
-        Token::LESS_EQUAL    => rule.new(nil, nil, PREC_NONE),
-        Token::IDENTIFIER    => rule.new(nil, nil, PREC_NONE),
-        Token::STRING        => rule.new(nil, nil, PREC_NONE),
-        Token::NUMBER        => rule.new(:number, nil, PREC_NONE),
-        Token::AND           => rule.new(nil, nil, PREC_NONE),
-        Token::CLASS         => rule.new(nil, nil, PREC_NONE),
-        Token::ELSE          => rule.new(nil, nil, PREC_NONE),
-        Token::FALSE         => rule.new(:literal, nil, PREC_NONE),
-        Token::FOR           => rule.new(nil, nil, PREC_NONE),
-        Token::FUN           => rule.new(nil, nil, PREC_NONE),
-        Token::IF            => rule.new(nil, nil, PREC_NONE),
-        Token::NIL           => rule.new(:literal, nil, PREC_NONE),
-        Token::OR            => rule.new(nil, nil, PREC_NONE),
-        Token::PRINT         => rule.new(nil, nil, PREC_NONE),
-        Token::RETURN        => rule.new(nil, nil, PREC_NONE),
-        Token::SUPER         => rule.new(nil, nil, PREC_NONE),
-        Token::THIS          => rule.new(nil, nil, PREC_NONE),
-        Token::TRUE          => rule.new(:literal, nil, PREC_NONE),
-        Token::VAR           => rule.new(nil, nil, PREC_NONE),
-        Token::WHILE         => rule.new(nil, nil, PREC_NONE),
-        Token::ERROR         => rule.new(nil, nil, PREC_NONE),
-        Token::EOF           => rule.new(nil, nil, PREC_NONE),
+        Token::LESS => rule.new(nil, nil, PREC_NONE),
+        Token::LESS_EQUAL => rule.new(nil, nil, PREC_NONE),
+        Token::IDENTIFIER => rule.new(nil, nil, PREC_NONE),
+        Token::STRING => rule.new(nil, nil, PREC_NONE),
+        Token::NUMBER => rule.new(:number, nil, PREC_NONE),
+        Token::AND => rule.new(nil, nil, PREC_NONE),
+        Token::CLASS => rule.new(nil, nil, PREC_NONE),
+        Token::ELSE => rule.new(nil, nil, PREC_NONE),
+        Token::FALSE => rule.new(:literal, nil, PREC_NONE),
+        Token::FOR => rule.new(nil, nil, PREC_NONE),
+        Token::FUN => rule.new(nil, nil, PREC_NONE),
+        Token::IF => rule.new(nil, nil, PREC_NONE),
+        Token::NIL => rule.new(:literal, nil, PREC_NONE),
+        Token::OR => rule.new(nil, nil, PREC_NONE),
+        Token::PRINT => rule.new(nil, nil, PREC_NONE),
+        Token::RETURN => rule.new(nil, nil, PREC_NONE),
+        Token::SUPER => rule.new(nil, nil, PREC_NONE),
+        Token::THIS => rule.new(nil, nil, PREC_NONE),
+        Token::TRUE => rule.new(:literal, nil, PREC_NONE),
+        Token::VAR => rule.new(nil, nil, PREC_NONE),
+        Token::WHILE => rule.new(nil, nil, PREC_NONE),
+        Token::ERROR => rule.new(nil, nil, PREC_NONE),
+        Token::EOF => rule.new(nil, nil, PREC_NONE),
       }
       rules.freeze
     end
