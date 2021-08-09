@@ -4,16 +4,17 @@ module Lr
     OP_NIL = 1
     OP_TRUE = 2
     OP_FALSE = 3
-    OP_EQUAL = 4
-    OP_GREATER = 5
-    OP_LESS = 6
-    OP_ADD = 7
-    OP_SUBTRACT = 8
-    OP_MULTIPLY = 9
-    OP_DIVIDE = 10
-    OP_NOT = 11
-    OP_NEGATE = 12
-    OP_PRINT = 13
-    OP_RETURN = 14
+    OP_POP = 4
+    OP_EQUAL = 5
+    OP_GREATER = 6
+    OP_LESS = 7
+    OP_ADD = 8
+    OP_SUBTRACT = 9
+    OP_MULTIPLY = 10
+    OP_DIVIDE = 11
+    OP_NOT = 12
+    OP_NEGATE = 13
+    OP_PRINT = 14
+    OP_RETURN = 15
   end
 end

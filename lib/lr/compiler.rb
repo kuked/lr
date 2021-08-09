@@ -53,12 +53,22 @@ module Lr
       emit_byte(Opcode::OP_PRINT)
     end
 
+    def expression_statement
+      expression
+      consume(Token::SEMICOLON, "Expect ';' after expression.")
+      emit_byte(Opcode::OP_POP)
+    end
+
     def declaration
       statement
     end
 
     def statement
-      print_statement if match(Token::PRINT)
+      if match(Token::PRINT)
+        print_statement
+      else
+        expression_statement
+      end
     end
 
     def grouping
@@ -71,7 +81,7 @@ module Lr
 
       # Compile the operand.
       parse_precedence(PREC_UNARY)
-      n
+
       # Emit the operator instruction.
       case type
       when Token::BANG

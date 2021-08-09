@@ -41,6 +41,8 @@ module Lr
           push(Value.bool_val(false))
         when Opcode::OP_TRUE
           push(Value.bool_val(true))
+        when Opcode::OP_POP
+          pop
         when Opcode::OP_EQUAL
           b = pop
           a = pop
