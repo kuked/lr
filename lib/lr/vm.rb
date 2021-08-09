@@ -71,8 +71,10 @@ module Lr
             return INTERPRET_RUNTIME_ERROR
           end
           push(Value.number_val(-pop.value))
-        when Opcode::OP_RETURN
+        when Opcode::OP_PRINT
           puts pop.printable
+        when Opcode::OP_RETURN
+          # Exit interpreter.
           return INTERPRET_OK
         end
       end

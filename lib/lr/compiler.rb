@@ -30,8 +30,11 @@ module Lr
       @scanner = Scanner.new(source)
 
       advance
-      expression
-      consume(Token::EOF, "Expect end of expression.")
+
+      until match(Token::EOF)
+        declaration
+      end
+
       emit_return
 
       @chunk.disassemble("code")
@@ -44,6 +47,20 @@ module Lr
       parse_precedence(PREC_ASSIGNMENT)
     end
 
+    def print_statement
+      expression
+      consume(Token::SEMICOLON, "Expect ';' after value.")
+      emit_byte(Opcode::OP_PRINT)
+    end
+
+    def declaration
+      statement
+    end
+
+    def statement
+      print_statement if match(Token::PRINT)
+    end
+
     def grouping
       expression
       consume(Token::RIGHT_PAREN, "Expect ')' after expression.")
@@ -54,7 +71,7 @@ module Lr
 
       # Compile the operand.
       parse_precedence(PREC_UNARY)
-
+      n
       # Emit the operator instruction.
       case type
       when Token::BANG
@@ -131,10 +148,22 @@ module Lr
       @current.type == type ? advance : error_at_current(message)
     end
 
+    def match(type)
+      return false unless check(type)
+      advance
+      true
+    end
+
+    def check(type)
+      @current.type == type
+    end
+
     def error_at_current(message)
+      # TODO: write this.
     end
 
     def error(message)
+      # TODO: write this.
     end
 
     def error_at(token, message)

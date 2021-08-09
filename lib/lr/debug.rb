@@ -49,6 +49,8 @@ module Lr
         simple_instruction("OP_NOT", offset)
       when Opcode::OP_NEGATE
         simple_instruction("OP_NEGATE", offset)
+      when Opcode::OP_PRINT
+        simple_instruction("OP_PRINT", offset)
       when Opcode::OP_RETURN
         simple_instruction("OP_RETURN", offset)
       else

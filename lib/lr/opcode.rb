@@ -13,6 +13,7 @@ module Lr
     OP_DIVIDE = 10
     OP_NOT = 11
     OP_NEGATE = 12
-    OP_RETURN = 13
+    OP_PRINT = 13
+    OP_RETURN = 14
   end
 end
