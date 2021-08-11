@@ -9,14 +9,15 @@ module Lr
     INTERPRET_COMPILE_ERROR = 1
     INTERPRET_RUNTIME_ERROR = 2
 
-    def initialize
+    def initialize(debug = false)
       @stack = []
       @compiler = Compiler.new
+      @debug = debug
     end
 
     def interpret(source)
       # TODO: catch exception
-      @chunk = @compiler.compile(source)
+      @chunk = @compiler.compile(source, @debug)
       run
     end
 
@@ -25,10 +26,12 @@ module Lr
     def run
       @ip = 0
       loop do
-        print " " * 10
-        @stack.each { |slot| print "[ #{slot.printable} ]" }
-        puts
-        @chunk.disassemble_instruction(@ip)
+        if @debug
+          print " " * 10
+          @stack.each { |slot| print "[ #{slot.printable} ]" }
+          puts
+          @chunk.disassemble_instruction(@ip)
+        end
 
         instruction = read_code
         case instruction

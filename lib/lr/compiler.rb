@@ -25,7 +25,7 @@ module Lr
       @rules = define_rules
     end
 
-    def compile(source)
+    def compile(source, debug = false)
       @chunk = Chunk.new
       @scanner = Scanner.new(source)
 
@@ -37,7 +37,7 @@ module Lr
 
       emit_return
 
-      @chunk.disassemble("code")
+      @chunk.disassemble("code") if debug
       @chunk
     end
 
