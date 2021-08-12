@@ -21,4 +21,18 @@ class LrTest < Minitest::Test
     assert_output("true\n") { vm.interpret("print !false;") }
     assert_output("false\n") { vm.interpret("print !true;") }
   end
+
+  def test_compare_operation
+    vm = Lr::VM.new
+    assert_output("true\n") { vm.interpret("print 1 == 1;") }
+    assert_output("true\n") { vm.interpret("print 1 != 2;") }
+    assert_output("true\n") { vm.interpret("print 2 < 3;") }
+    assert_output("true\n") { vm.interpret("print 3 <= 4;") }
+    assert_output("false\n") { vm.interpret("print 3 < 2;") }
+    assert_output("false\n") { vm.interpret("print 4 <= 3;") }
+    assert_output("true\n") { vm.interpret("print 3 > 2;") }
+    assert_output("true\n") { vm.interpret("print 4 >= 3;") }
+    assert_output("false\n") { vm.interpret("print 2 > 3;") }
+    assert_output("false\n") { vm.interpret("print 3 >= 4;") }
+  end
 end
