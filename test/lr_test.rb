@@ -7,11 +7,11 @@ class LrTest < Minitest::Test
 
   def test_arithmetic_operation
     vm = Lr::VM.new
-    assert_output("3.0\n") { vm.interpret("print 1 + 2;") }
-    assert_output("0.0\n") { vm.interpret("print 1 + 2 - 3;") }
-    assert_output("-9.0\n") { vm.interpret("print 1 + 2 - 3 * 4;") }
-    assert_output("0.6000000000000001\n") { vm.interpret("print 1 + 2 - 3 * 4 / 5;") } # yuck :-<
-    assert_output("9.0\n") { vm.interpret("print (1 + 2) * 3;") }
+    assert_output("3\n") { vm.interpret("print 1 + 2;") }
+    assert_output("0\n") { vm.interpret("print 1 + 2 - 3;") }
+    assert_output("-9\n") { vm.interpret("print 1 + 2 - 3 * 4;") }
+    assert_output("0.6\n") { vm.interpret("print 1 + 2 - 3 * 4 / 5;") }
+    assert_output("9\n") { vm.interpret("print (1 + 2) * 3;") }
   end
 
   def test_boolean_operation
