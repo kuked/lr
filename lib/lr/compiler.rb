@@ -47,6 +47,19 @@ module Lr
       parse_precedence(PREC_ASSIGNMENT)
     end
 
+    def var_declaration
+      global = parse_variable("Expect variable name.")
+
+      if match(Token::EQUAL)
+        expression
+      else
+        emit_byte(Token::NIL)
+      end
+      consume(Token::SEMICOLON, "Expect ';' after variable declaration.")
+
+      define_variable(global)
+    end
+
     def print_statement
       expression
       consume(Token::SEMICOLON, "Expect ';' after value.")
@@ -60,7 +73,13 @@ module Lr
     end
 
     def declaration
-      statement
+      if match(Token::VAR)
+        var_declaration
+      else
+        statement
+      end
+
+      # TODO: synchronize
     end
 
     def statement
@@ -141,6 +160,15 @@ module Lr
     def string
       value = @previous.lexeme[1..-2] # trim quotation marks
       emit_constant(Value.obj_val(Lr::Object.string_obj(value)))
+    end
+
+    def variable
+      named_variable(@previous)
+    end
+
+    def named_variable(name)
+      arg = identifier_constatnt(name)
+      emit_bytes(Opcode::OP_GET_GLOBAL, arg)
     end
 
     def advance
@@ -225,6 +253,19 @@ module Lr
       end
     end
 
+    def parse_variable(error_message)
+      consume(Token::IDENTIFIER, error_message)
+      identifier_constatnt(@previous)
+    end
+
+    def define_variable(global)
+      emit_bytes(Opcode::OP_DEFINE_GLOBAL, global)
+    end
+
+    def identifier_constatnt(name)
+      make_constant(Lr::Value.obj_val(name.lexeme))
+    end
+
     def define_rules
       rule = Struct.new(:prefix, :infix, :precedence)
       rules = {
@@ -247,7 +288,7 @@ module Lr
         Token::GREATER_EQUAL => rule.new(nil, :binary, PREC_COMPARISON),
         Token::LESS => rule.new(nil, :binary, PREC_COMPARISON),
         Token::LESS_EQUAL => rule.new(nil, :binary, PREC_COMPARISON),
-        Token::IDENTIFIER => rule.new(nil, nil, PREC_NONE),
+        Token::IDENTIFIER => rule.new(:variable, nil, PREC_NONE),
         Token::STRING => rule.new(:string, nil, PREC_NONE),
         Token::NUMBER => rule.new(:number, nil, PREC_NONE),
         Token::AND => rule.new(nil, nil, PREC_NONE),

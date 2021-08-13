@@ -33,6 +33,10 @@ module Lr
         simple_instruction("OP_TRUE", offset)
       when Opcode::OP_POP
         simple_instruction("OP_POP", offset)
+      when Opcode::OP_GET_GLOBAL
+        constant_instruction("OP_GET_GLOBAL", offset)
+      when Opcode::OP_DEFINE_GLOBAL
+        constant_instruction("OP_DEFINE_GLOBAL", offset)
       when Opcode::OP_EQUAL
         return simple_instruction("OP_EQUAL", offset)
       when Opcode::OP_GREATER

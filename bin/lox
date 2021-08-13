@@ -5,7 +5,7 @@ require "lr"
 
 def repl(vm)
   loop do
-    print '> '
+    print "> "
     line = gets
     break unless line
 
@@ -22,8 +22,7 @@ def run_file(path, vm)
   end
 end
 
-
-vm = Lr::VM.new
+vm = Lr::VM.new(true)
 
 if ARGV.empty?
   repl(vm)

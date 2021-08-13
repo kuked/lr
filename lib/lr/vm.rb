@@ -13,6 +13,7 @@ module Lr
       @stack = []
       @compiler = Compiler.new
       @debug = debug
+      @globals = {}
     end
 
     def interpret(source)
@@ -45,6 +46,18 @@ module Lr
         when Opcode::OP_TRUE
           push(Value.bool_val(true))
         when Opcode::OP_POP
+          pop
+        when Opcode::OP_GET_GLOBAL
+          name = @chunk.read_constant(read_code)
+          value = @globals[name.value]
+          unless value
+            # TODO: runtime_error
+            return INTERPRET_RUNTIME_ERROR
+          end
+          push(value)
+        when Opcode::OP_DEFINE_GLOBAL
+          name = @chunk.read_constant(read_code)
+          @globals[name.value] = peek(0)
           pop
         when Opcode::OP_EQUAL
           b = pop
