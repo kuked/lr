@@ -68,7 +68,7 @@ module Lr
       when VAL_NIL
         "nil"
       when VAL_NUMBER
-        printf("%g", @value)
+        sprintf("%g", @value)
       when VAL_OBJ
         @value.printable
       end
