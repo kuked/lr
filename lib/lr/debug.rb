@@ -37,6 +37,8 @@ module Lr
         constant_instruction("OP_GET_GLOBAL", offset)
       when Opcode::OP_DEFINE_GLOBAL
         constant_instruction("OP_DEFINE_GLOBAL", offset)
+      when Opcode::OP_SET_GLOBAL
+        constant_instruction("OP_SET_GLOBAL", offset)
       when Opcode::OP_EQUAL
         return simple_instruction("OP_EQUAL", offset)
       when Opcode::OP_GREATER

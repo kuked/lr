@@ -90,12 +90,12 @@ module Lr
       end
     end
 
-    def grouping
+    def grouping(assign)
       expression
       consume(Token::RIGHT_PAREN, "Expect ')' after expression.")
     end
 
-    def unary
+    def unary(assign)
       type = @previous.type
 
       # Compile the operand.
@@ -112,7 +112,7 @@ module Lr
       end
     end
 
-    def binary
+    def binary(assign)
       type = @previous.type
       rule = @rules[type]
       parse_precedence(rule.precedence + 1)
@@ -141,7 +141,7 @@ module Lr
       end
     end
 
-    def literal
+    def literal(assign)
       case @previous.type
       when Token::FALSE
         emit_byte(Opcode::OP_FALSE)
@@ -152,23 +152,28 @@ module Lr
       end
     end
 
-    def number
+    def number(assign)
       value = @previous.lexeme.to_f
       emit_constant(Value.number_val(value))
     end
 
-    def string
+    def string(assign)
       value = @previous.lexeme[1..-2] # trim quotation marks
       emit_constant(Value.obj_val(Lr::Object.string_obj(value)))
     end
 
-    def variable
-      named_variable(@previous)
+    def variable(assign)
+      named_variable(@previous, assign)
     end
 
-    def named_variable(name)
+    def named_variable(name, assign)
       arg = identifier_constatnt(name)
-      emit_bytes(Opcode::OP_GET_GLOBAL, arg)
+      if assign && match(Token::EQUAL)
+        expression
+        emit_bytes(Opcode::OP_SET_GLOBAL, arg)
+      else
+        emit_bytes(Opcode::OP_GET_GLOBAL, arg)
+      end
     end
 
     def advance
@@ -244,12 +249,17 @@ module Lr
         # error("Expect expression.")
         return
       end
-      self.send(prefix)
+      assign = precedence <= PREC_ASSIGNMENT
+      self.send(prefix, assign)
 
       while precedence <= @rules[@current.type].precedence
         advance
         infix = @rules[@previous.type].infix
-        self.send(infix)
+        self.send(infix, assign)
+      end
+
+      if assign && match(Token::EQUAL)
+        # TODO: error("Invalid assignment target.")
       end
     end
 

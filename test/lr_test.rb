@@ -35,4 +35,10 @@ class LrTest < Minitest::Test
     assert_output("false\n") { vm.interpret("print 2 > 3;") }
     assert_output("false\n") { vm.interpret("print 3 >= 4;") }
   end
+
+  def test_global_variable
+    vm = Lr::VM.new
+    script = 'var a = "a"; var b = "b"; a = "a with " + b; print a;'
+    assert_output("a with b\n") { vm.interpret(script) }
+  end
 end

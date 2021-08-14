@@ -59,6 +59,13 @@ module Lr
           name = @chunk.read_constant(read_code)
           @globals[name.value] = peek(0)
           pop
+        when Opcode::OP_SET_GLOBAL
+          name = @chunk.read_constant(read_code)
+          unless @globals.has_key? name.value
+            # TODO: runtime_error
+            return INTERPRET_RUNTIME_ERROR
+          end
+          @globals[name.value] = peek(0)
         when Opcode::OP_EQUAL
           b = pop
           a = pop
