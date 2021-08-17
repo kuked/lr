@@ -41,4 +41,10 @@ class LrTest < Minitest::Test
     script = 'var a = "a"; var b = "b"; a = "a with " + b; print a;'
     assert_output("a with b\n") { vm.interpret(script) }
   end
+
+  def test_local_variable
+    vm = Lr::VM.new
+    script = "{ var a = 1; { var a = 2; print a; } }"
+    assert_output("2\n") { vm.interpret(script) }
+  end
 end

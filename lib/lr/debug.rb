@@ -33,6 +33,10 @@ module Lr
         simple_instruction("OP_TRUE", offset)
       when Opcode::OP_POP
         simple_instruction("OP_POP", offset)
+      when Opcode::OP_GET_LOCAL
+        byte_instruction("OP_GET_LOCAL", offset)
+      when Opcode::OP_SET_LOCAL
+        byte_instruction("OP_SET_LOCAL", offset)
       when Opcode::OP_GET_GLOBAL
         constant_instruction("OP_GET_GLOBAL", offset)
       when Opcode::OP_DEFINE_GLOBAL
@@ -75,6 +79,12 @@ module Lr
     def constant_instruction(name, offset)
       constant = @code[offset + 1]
       puts format("%-16s %4d '#{@constants[constant].value}'", name, constant)
+      offset + 2
+    end
+
+    def byte_instruction(name, offset)
+      slot = @code[offset + 1]
+      puts format("%-16s %4d", name, slot)
       offset + 2
     end
   end

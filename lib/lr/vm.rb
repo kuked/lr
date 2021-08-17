@@ -47,6 +47,12 @@ module Lr
           push(Value.bool_val(true))
         when Opcode::OP_POP
           pop
+        when Opcode::OP_GET_LOCAL
+          slot = read_code
+          push(@stack[slot])
+        when Opcode::OP_SET_LOCAL
+          slot = read_code
+          @stack[slot] = peek(0)
         when Opcode::OP_GET_GLOBAL
           name = @chunk.read_constant(read_code)
           value = @globals[name.value]

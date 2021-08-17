@@ -5,19 +5,21 @@ module Lr
     OP_TRUE = 2
     OP_FALSE = 3
     OP_POP = 4
-    OP_GET_GLOBAL = 5
-    OP_DEFINE_GLOBAL = 6
-    OP_SET_GLOBAL = 7
-    OP_EQUAL = 8
-    OP_GREATER = 9
-    OP_LESS = 10
-    OP_ADD = 11
-    OP_SUBTRACT = 12
-    OP_MULTIPLY = 13
-    OP_DIVIDE = 14
-    OP_NOT = 15
-    OP_NEGATE = 16
-    OP_PRINT = 17
-    OP_RETURN = 18
+    OP_GET_LOCAL = 5
+    OP_SET_LOCAL = 6
+    OP_GET_GLOBAL = 7
+    OP_DEFINE_GLOBAL = 8
+    OP_SET_GLOBAL = 9
+    OP_EQUAL = 10
+    OP_GREATER = 11
+    OP_LESS = 12
+    OP_ADD = 13
+    OP_SUBTRACT = 14
+    OP_MULTIPLY = 15
+    OP_DIVIDE = 16
+    OP_NOT = 17
+    OP_NEGATE = 18
+    OP_PRINT = 19
+    OP_RETURN = 20
   end
 end

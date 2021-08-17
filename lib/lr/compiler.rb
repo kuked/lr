@@ -3,6 +3,7 @@ require_relative "scanner"
 require_relative "opcode"
 require_relative "token"
 require_relative "object"
+require_relative "local"
 
 module Lr
   class Compiler
@@ -23,6 +24,9 @@ module Lr
       @current = nil
       @previous = nil
       @rules = define_rules
+      @locals = []
+      @local_count = 0
+      @scope_depth = 0
     end
 
     def compile(source, debug = false)
@@ -43,8 +47,30 @@ module Lr
 
     private
 
+    def begin_scope
+      @scope_depth += 1
+    end
+
+    def end_scope
+      @scope_depth -= 1
+      while @local_count > 0 && @locals[@local_count - 1].depth > @scope_depth
+        emit_byte(Opcode::OP_POP)
+        @locals.pop
+        @local_count -= 1
+      end
+    end
+
     def expression
       parse_precedence(PREC_ASSIGNMENT)
+    end
+
+    def block
+      loop do
+        break if check(Token::RIGHT_BRACE) || check(Token::EOF)
+        declaration
+      end
+
+      consume(Token::RIGHT_BRACE, "Expect '}' after block.")
     end
 
     def var_declaration
@@ -85,6 +111,10 @@ module Lr
     def statement
       if match(Token::PRINT)
         print_statement
+      elsif match(Token::LEFT_BRACE)
+        begin_scope
+        block
+        end_scope
       else
         expression_statement
       end
@@ -167,12 +197,21 @@ module Lr
     end
 
     def named_variable(name, assign)
-      arg = identifier_constatnt(name)
+      get_op = Opcode::OP_GET_LOCAL
+      set_op = Opcode::OP_SET_LOCAL
+
+      arg = resolve_local(name)
+      if arg == -1
+        arg = identifier_constant(name)
+        get_op = Opcode::OP_GET_GLOBAL
+        set_op = Opcode::OP_SET_GLOBAL
+      end
+
       if assign && match(Token::EQUAL)
         expression
-        emit_bytes(Opcode::OP_SET_GLOBAL, arg)
+        emit_bytes(set_op, arg)
       else
-        emit_bytes(Opcode::OP_GET_GLOBAL, arg)
+        emit_bytes(get_op, arg)
       end
     end
 
@@ -265,15 +304,58 @@ module Lr
 
     def parse_variable(error_message)
       consume(Token::IDENTIFIER, error_message)
-      identifier_constatnt(@previous)
+
+      declare_variable
+      return 0 if @scope_depth > 0
+
+      identifier_constant(@previous)
+    end
+
+    def mark_initialized
+      @locals[@local_count - 1].depth = @scope_depth
     end
 
     def define_variable(global)
+      if @scope_depth > 0
+        mark_initialized
+        return
+      end
       emit_bytes(Opcode::OP_DEFINE_GLOBAL, global)
     end
 
-    def identifier_constatnt(name)
+    def identifier_constant(name)
       make_constant(Lr::Value.obj_val(name.lexeme))
+    end
+
+    def identifier_equal(a, b)
+      a.lexeme == b.lexeme
+    end
+
+    def resolve_local(name)
+      index = @locals.rindex { |local| identifier_equal(local.name, name) }
+      if index && @locals[index].depth == -1
+        error("Can't read local variable in its own initializer.")
+      end
+      index ? index : -1
+    end
+
+    def add_local(name)
+      @locals << Local.new(name, -1)
+      @local_count += 1
+    end
+
+    def declare_variable
+      return if @scope_depth == 0
+
+      name = @previous
+      @locals.each do |local|
+        break if local.depth != -1 && local.depth < @scope_depth
+        if identifier_equal(name, local.name)
+          error("Already a variable with this name in this scope.")
+        end
+      end
+
+      add_local(name)
     end
 
     def define_rules
