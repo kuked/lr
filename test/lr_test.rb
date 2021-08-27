@@ -47,4 +47,12 @@ class LrTest < Minitest::Test
     script = "{ var a = 1; { var a = 2; print a; } }"
     assert_output("2\n") { vm.interpret(script) }
   end
+
+  def test_if_statement
+    vm = Lr::VM.new
+    script = "if (true) { print \"wa!\"; }"
+    assert_output("wa!\n") { vm.interpret(script) }
+    script = "if (false) { print \"wa!\"; }"
+    assert_output("") { vm.interpret(script) }
+  end
 end

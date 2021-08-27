@@ -63,6 +63,8 @@ module Lr
         simple_instruction("OP_NEGATE", offset)
       when Opcode::OP_PRINT
         simple_instruction("OP_PRINT", offset)
+      when Opcode::OP_JUMP_IF_FALSE
+        jump_instruction("OP_JUMP_IF_FALSE", 1, offset)
       when Opcode::OP_RETURN
         simple_instruction("OP_RETURN", offset)
       else
@@ -85,6 +87,12 @@ module Lr
     def byte_instruction(name, offset)
       slot = @code[offset + 1]
       puts format("%-16s %4d", name, slot)
+      offset + 2
+    end
+
+    def jump_instruction(name, sign, offset)
+      jump = @code[offset + 1]
+      puts format("%-16s %4d -> %d", name, offset, offset + 2 + sign * jump)
       offset + 2
     end
   end

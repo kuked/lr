@@ -20,6 +20,7 @@ module Lr
     OP_NOT = 17
     OP_NEGATE = 18
     OP_PRINT = 19
-    OP_RETURN = 20
+    OP_JUMP_IF_FALSE = 20
+    OP_RETURN = 21
   end
 end

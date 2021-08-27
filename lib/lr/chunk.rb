@@ -5,7 +5,7 @@ module Lr
   class Chunk
     include Debug
 
-    attr_reader :code
+    attr_reader :code, :count
 
     def initialize
       @count = 0

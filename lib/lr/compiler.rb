@@ -98,6 +98,17 @@ module Lr
       emit_byte(Opcode::OP_POP)
     end
 
+    def if_statement
+      consume(Token::LEFT_PAREN, "Expect '(' after 'if'.")
+      expression
+      consume(Token::RIGHT_PAREN, "Expect ')' after condition.")
+
+      then_jump = emit_jump(Opcode::OP_JUMP_IF_FALSE)
+      statement
+
+      patch_jump(then_jump)
+    end
+
     def declaration
       if match(Token::VAR)
         var_declaration
@@ -111,6 +122,8 @@ module Lr
     def statement
       if match(Token::PRINT)
         print_statement
+      elsif match(Token::IF)
+        if_statement
       elsif match(Token::LEFT_BRACE)
         begin_scope
         block
@@ -268,12 +281,24 @@ module Lr
       emit_byte(byte2)
     end
 
+    def emit_jump(instruction)
+      emit_byte(instruction)
+      emit_byte(0xff)
+      @chunk.count - 1
+    end
+
     def emit_return
       emit_byte(Opcode::OP_RETURN)
     end
 
     def emit_constant(value)
       emit_bytes(Opcode::OP_CONSTANT, make_constant(value))
+    end
+
+    def patch_jump(offset)
+      jump = @chunk.count - offset - 1
+
+      @chunk.code[offset] = jump
     end
 
     def make_constant(value)
