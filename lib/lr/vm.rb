@@ -104,6 +104,9 @@ module Lr
           push(Value.number_val(-pop.value))
         when Opcode::OP_PRINT
           puts pop.printable
+        when Opcode::OP_JUMP
+          offset = read_code
+          @ip += offset
         when Opcode::OP_JUMP_IF_FALSE
           offset = read_code
           if peek(0).falsey?

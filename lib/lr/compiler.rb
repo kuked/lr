@@ -104,9 +104,15 @@ module Lr
       consume(Token::RIGHT_PAREN, "Expect ')' after condition.")
 
       then_jump = emit_jump(Opcode::OP_JUMP_IF_FALSE)
+      emit_byte(Opcode::OP_POP)
       statement
 
+      else_jump = emit_jump(Opcode::OP_JUMP)
       patch_jump(then_jump)
+      emit_byte(Opcode::OP_POP)
+
+      statement if match(Token::ELSE)
+      patch_jump(else_jump)
     end
 
     def declaration

@@ -63,6 +63,8 @@ module Lr
         simple_instruction("OP_NEGATE", offset)
       when Opcode::OP_PRINT
         simple_instruction("OP_PRINT", offset)
+      when Opcode::OP_JUMP
+        jump_instruction("OP_JUMP", 1, offset)
       when Opcode::OP_JUMP_IF_FALSE
         jump_instruction("OP_JUMP_IF_FALSE", 1, offset)
       when Opcode::OP_RETURN
